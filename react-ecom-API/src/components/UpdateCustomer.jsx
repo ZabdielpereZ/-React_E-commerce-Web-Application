@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import axios from 'axios'
 import { Alert, Button, Container, Form, Modal } from 'react-bootstrap'
+import { useParams } from "react-router-dom";
 
-const CustomerForm = () => {
+const UpdateCustomer = () => {
 
   // Customer Variables
+  const { id } = useParams();
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -48,9 +50,9 @@ const CustomerForm = () => {
     console.log(customer)
 
     try {
-      const response = await axios.post("http://127.0.0.1:5000/customers", customer, {
+      const response = await axios.put(`http://127.0.0.1:5000/customers/${id}`, customer, {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'Application/json'
         }
       })
 
@@ -90,7 +92,7 @@ const CustomerForm = () => {
   return (
     <Container>
 
-      <h2>New Customer</h2>
+        <h2>Update Customer Details</h2>
 
       { isLoading && <Alert variant='info'>Submitting customer data...</Alert> }
       { error && <Alert variant='danger'>Error: {error}</Alert> }
@@ -127,7 +129,7 @@ const CustomerForm = () => {
         <br />
 
         <Button type='submit' disabled={isLoading}>
-          { isLoading ? 'Creating Customer...' : 'Create Customer' }
+          { isLoading ? 'Updating Customer...' : 'Update Customer' }
         </Button>
       </Form>
 
@@ -137,7 +139,7 @@ const CustomerForm = () => {
             <Modal.Title>Success</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <p>{modalName} created successfully!</p>
+            <p>{modalName} successfully updated!</p>
           </Modal.Body>
           <Modal.Footer>
             <Button variant='danger' onClick={() => setShowSuccessModal(false)}>Close</Button>
@@ -149,4 +151,4 @@ const CustomerForm = () => {
   )
 }
 
-export default CustomerForm
+export default UpdateCustomer

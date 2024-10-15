@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Container, Form, Button } from 'react-bootstrap'
 import axios from 'axios' // Add this import
 import { ProgressBar } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
 const TrackOrder = () => {
   const [orderID, setOrderID] = useState('')
@@ -28,7 +29,7 @@ const TrackOrder = () => {
     try {
       setIsLoading(true)
 
-      const response = await axios.get(`http://127.0.0.1:5000/orders`)
+      const response = await axios.get('http://127.0.0.1:5000/orders')
       console.log(response)
       setOrder(response.data)
 
@@ -65,6 +66,8 @@ const TrackOrder = () => {
 
   return (
     <Container>
+      <h2>Orders</h2>
+      <Link to="/orders"><Button variant='primary' className='mb-3'>Add New Order</Button></Link>
 
       {/* Form to get the ID */}
       <Form onSubmit={trackOrder}>

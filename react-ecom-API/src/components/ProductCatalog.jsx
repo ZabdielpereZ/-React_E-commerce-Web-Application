@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Container, Alert, Button, ListGroup } from 'react-bootstrap'
 import { Link } from 'react-router-dom';
 
+
 const ProductCatalog = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -49,13 +50,16 @@ const ProductCatalog = () => {
     {/* { loading && <Alert variant='info'>Loading...</Alert> } */}
 
     <h1>Product List</h1>
+    <Link to="/add-product"><Button variant='primary' className='mb-3'>Add New Product</Button></Link>
 
     <ListGroup>
       {products.map(product => (
         <ListGroup.Item key={product.id} className='d-flex justify-content-between align-items-center shadow-sm p-3 mb-3 bg-white rounded'>
 
           {/* TODO - add edit product route to app.jsx */}
-          <Link to={`/edit-product/${product.id}`} >{product.product_name}</Link>
+          <Link to={`/product/${product.id}`} >{product.product_name}</Link>
+          {/* link with button to update customer with ${id}*/}
+          <Link to={`/edit-product/${product.id}`}><Button variant='outline-warning' className='mb-3'>update product</Button></Link>
 
           <Button variant='outline-danger' size='sm'
             onClick={() => {handleDelete(product.id)}}

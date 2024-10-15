@@ -2,12 +2,12 @@ import { useState } from 'react'
 import axios from 'axios'
 import { Alert, Button, Container, Form, Modal } from 'react-bootstrap'
 
-const CustomerForm = () => {
+const AddProducts = () => {
 
   // Customer Variables
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
+  const [price, setPrice] = useState('')
+  const [product, setProduct] = useState('')
+  const [stock, setStock] = useState('')
   const [modalName, setModalName] = useState('')
 
   // Form State Variables
@@ -40,31 +40,31 @@ const CustomerForm = () => {
     setIsLoading(true)
     setError(null)
 
-    const customer = {
-      "customer_name": name, 
-      "email": email, 
-      "phone": phone
+    const product = {
+      "price": price, 
+      "product": product, 
+      "stock": stock
     }
-    console.log(customer)
+    console.log(product)
 
     try {
-      const response = await axios.post("http://127.0.0.1:5000/customers", customer, {
+      const response = await axios.post("http://127.0.0.1:5000/products", product, {
         headers: {
           'Content-Type': 'application/json'
         }
       })
 
       const data = response.data;
-      console.log("Customer Created:", data)
+      console.log("Product Created:", data)
 
       // Trigger popup with success message (modal)
       setShowSuccessModal(true)
-      setModalName(name)
+      setModalName(product)
 
       // Reset the form 
-      setName('')
-      setEmail('')
-      setPhone('')
+      setPrice('')
+      setProduct('')
+      setStock('')
 
     } catch (error) {
 	    console.log("Error", error)
@@ -76,58 +76,54 @@ const CustomerForm = () => {
 
   const validateForm = () => {
     const errors = {}
-    // const errors = {
-    //   "name": '',
-    //   "email": '',
-    //   "phone": ''
-    // }
-    if (!name) errors.name = "Name is required"
-    if (!email) errors.email = "Email is required"
-    if (!phone) errors.phone = "Phone is required"
+
+    if (!price) errors.price = "Price is required"
+    if (!product) errors.product = "Product is required"
+    if (!stock) errors.stock = "Stock is required"
     return errors 
   }
 
   return (
     <Container>
 
-      <h2>New Customer</h2>
+        <h2>New Product</h2>
 
-      { isLoading && <Alert variant='info'>Submitting customer data...</Alert> }
+      { isLoading && <Alert variant='info'>Submitting product data...</Alert> }
       { error && <Alert variant='danger'>Error: {error}</Alert> }
 
       <Form onSubmit={handleSubmit}>
         
 
-        {/* Name section */}
-        <Form.Group controlId='formGroupName'>
+        {/* Price section */}
+        <Form.Group controlId='formGroupPrice'>
           {/* Replace label, input with Form.Label and Form.Control */}
-          <Form.Label>Name:</Form.Label>
-          <Form.Control type='text' value={name} onChange={(e) => setName(e.target.value) }/>
-          { errors?.name && <Alert variant='danger'>{errors.name}</Alert> }
+          <Form.Label>Price:</Form.Label>
+          <Form.Control type='price' value={price} onChange={(e) => setPrice(e.target.value) }/>
+          { errors?.price && <Alert variant='danger'>{errors.price}</Alert> }
         </Form.Group>
 
         <br />
 
-        {/* Email section */}
-        <Form.Group controlId='formGroupEmail'>
-          <Form.Label>Email:</Form.Label>
-          <Form.Control type='email' value={email} onChange={(e) => setEmail(e.target.value) }/>
-          { errors?.email && <Alert>Email is required</Alert> }
+        {/* Product name section */}
+        <Form.Group controlId='formGroupProduct'>
+          <Form.Label>Product Name:</Form.Label>
+          <Form.Control type='Product' value={product} onChange={(e) => setProduct(e.target.value) }/>
+          { errors?.product && <Alert>Product name is required</Alert> }
         </Form.Group>
 
         <br />
 
-        {/* Phone section */}
-        <Form.Group controlId='formGroupPhone'>
-          <Form.Label>Phone:</Form.Label>
-          <Form.Control type='phone' value={phone} onChange={(e) => setPhone(e.target.value) }/>
-          { errors?.phone && <Alert>Phone is required</Alert> }
+        {/* Stock section */}
+        <Form.Group controlId='formGroupStock'>
+          <Form.Label>Stock:</Form.Label>
+          <Form.Control type='stock' value={stock} onChange={(e) => setStock(e.target.value) }/>
+          { errors?.stock && <Alert>Stock is required</Alert> }
         </Form.Group>
 
         <br />
 
         <Button type='submit' disabled={isLoading}>
-          { isLoading ? 'Creating Customer...' : 'Create Customer' }
+          { isLoading ? 'Creating Product...' : 'Create Product' }
         </Button>
       </Form>
 
@@ -149,4 +145,4 @@ const CustomerForm = () => {
   )
 }
 
-export default CustomerForm
+export default AddProducts

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Container, Alert, Button, ListGroup } from 'react-bootstrap'
+import { Container, Alert, Button, ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const CustomerList = () => {
@@ -8,64 +8,60 @@ const CustomerList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // TODO - delete user 
-  // note: the delete function should trigger a reload of the customer list to reflect the changes
+  const handleDelete = async (id) => {
+    try {
+      setLoading(true);
+      const response = await axios.delete(`http://127.0.0.1:5000/customers/${id}`);
+      console.log(response);
+      fetchCustomers(); // Reload the list after deleting
+    } catch (error) {
+      console.log(error);
+      setError({"message": "Customer is connected to an order, cannot delete"});
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchCustomers = async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:5000/customers');
+      console.log(response.data);
+      setCustomers(response.data);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-
-    const fetchCustomers = async () => {
-      try {
-      const response = await axios.get(' http://127.0.0.1:5000/customers');
-      setCustomers(response.data);
-      } catch (error) {
-      setError(error);
-      } finally {
-      setLoading(false);
-      }
-    };
-
     fetchCustomers();
   }, []);
 
-  if (loading) {
-    return <Container><Alert variant='info'>Loading...</Alert></Container>;
-  }
-
-  // if (error) {
-  //   return <div>Error: {error.message}</div>;
-  // }
 
   return (
     <Container>
-
-      { error && <Alert variant='danger'>Error: {error.message}</Alert> }
-      {/* { loading && <Alert variant='info'>Loading...</Alert> } */}
+      {error && <Alert variant='danger'>Error: {error.message}</Alert>}
+      {loading && <Alert variant='info'>Loading...</Alert>}
 
       <h1>Customer List</h1>
+      {/* Adding link to add Customers */}
+      <Link to="/add-customers"><Button variant='primary' className='mb-3'>Add New Customer</Button></Link>
 
       <ListGroup>
+        {/* Mapping Customer */}
         {customers.map(customer => (
           <ListGroup.Item key={customer.id} className='d-flex justify-content-between align-items-center shadow-sm p-3 mb-3 bg-white rounded'>
-
-            {/* TODO - add edit customer route to app.jsx 
-            <Link to={`/edit-customers/${customer.id}`} >{customer.name.firstname} {customer.name.lastname}</Link> *}
-
-            {/* TODO - replace onclick function with delete function */}
-            <Button variant='outline-danger' size='sm'
-              onClick={() => {alert(`Delete customer ${customer.id}`)}}
-            >Delete</Button>
-
+            {/* Link to customer details with id*/}
+            <Link to={`/customer/${customer.id}`}>{customer.customer_name} {customer.name}</Link>
+            {/* link with button to update customer with ${id}*/}
+            <Link to={`/update-customer/${customer.id}`}><Button variant='outline-warning' className='mb-3'>update customer</Button></Link>
+            {/* Delete Button */}
+            <Button variant='outline-danger' size='sm' onClick={() => handleDelete(customer.id)}>Delete</Button>
           </ListGroup.Item>
+          
         ))}
       </ListGroup>
-
-      {/* <ul>
-        {customers.map((customer) => (
-          <li key={customer.id}>
-            {customer.name.firstname} {customer.name.lastname}
-          </li>
-        ))}
-      </ul> */}
     </Container>
   );
 };
