@@ -8,7 +8,7 @@ import { Alert, Button, Container, Form, Modal } from 'react-bootstrap'
 const OrderForm = () => {
 
   // order Variables
-  const [productName, setProductName] = useState('')
+//   const [productName, setProductName] = useState('')
   const [customerId, setCustomerId] = useState('')
   const [orderDate, setOrderDate] = useState('')
   const [deliveryDate, setDeliveryDate] = useState('')
@@ -38,12 +38,25 @@ const OrderForm = () => {
     setIsLoading(true)
     setError(null)
 
+// example for correct data
+    // const order2 = {
+    //     "customer_id": 2,
+    //     "delivery_date": "2024-08-31",
+    //     "order_date": "2024-08-30"
+    // } 
+
+    // Correct order format if incorrect
+    // correct: year - month - day
+    // incorrect: month- day- year 
+
+    const date_to_format = new Date(orderDate)
+
     const order = {
-      "productName": productName, 
-      "customerId": customerId, 
-      "orderDate": orderDate,
-      "deliveryDate": deliveryDate
+        "customer_id": customerId,
+        "delivery_date": deliveryDate,
+        "order_date": orderDate,
     }
+
     console.log(order)
 
     try {
@@ -58,10 +71,10 @@ const OrderForm = () => {
 
       // Trigger popup with success message (modal)
       setShowSuccessModal(true)
-      setModalName(order)
+      setModalName('Order created successfully')
 
       // Reset the form 
-      setProductName('')
+    //   setProductName('')
       setCustomerId('')
       setOrderDate('')
       setDeliveryDate('')
@@ -76,7 +89,7 @@ const OrderForm = () => {
 
   const validateForm = () => {
     const errors = {}
-    if (!productName) errors.productName = "Product name is required"
+    // if (!productName) errors.productName = "Product name is required"
     if (!customerId) errors.customerId = "Customer ID is required"
     if (!orderDate) errors.orderDate = "Order date is required"
     if (!deliveryDate) errors.deliveryDate = "Delivery date is required"
@@ -95,14 +108,14 @@ const OrderForm = () => {
         
 
         {/* product Name section */}
-        <Form.Group controlId='formGroupProductName'>
+        {/* <Form.Group controlId='formGroupProductName'>
           {/* Replace label, input with Form.Label and Form.Control */}
-          <Form.Label>Product Name:</Form.Label>
+          {/* <Form.Label>Product Name:</Form.Label>
           <Form.Control type='text' value={productName} onChange={(e) => setProductName(e.target.value) }/>
           { errors?.productName && <Alert variant='danger'>{errors.productName}</Alert> }
-        </Form.Group>
+        </Form.Group> */}
 
-        <br />
+        {/* <br />  */}
 
         {/* Customer ID */}
         <Form.Group controlId='formGroupCustomerId'>
@@ -142,7 +155,7 @@ const OrderForm = () => {
             <Modal.Title>Success</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <p>{modalName} created successfully!</p>
+            <p>{modalName}</p>
           </Modal.Body>
           <Modal.Footer>
             <Button variant='danger' onClick={() => setShowSuccessModal(false)}>Close</Button>

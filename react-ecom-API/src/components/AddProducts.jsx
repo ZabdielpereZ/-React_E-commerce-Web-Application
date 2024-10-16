@@ -19,15 +19,12 @@ const AddProducts = () => {
 
   // Form validate errors 
   const [errors, setErrors] = useState(null)
-  // const [errors, setErrors] = useState({
-  //   "name": '',
-  //   "email": '',
-  //   "password": ''
-  // })
 
 
   const handleSubmit = async (e) => {
     e.preventDefault(); 
+
+    console.log("Prevented Default")
 
     // Validate the form 
     const errors = validateForm()
@@ -36,19 +33,22 @@ const AddProducts = () => {
       return
     }
 
+    console.log("validated form")
+
     // Begin the loading process
     setIsLoading(true)
     setError(null)
 
-    const product = {
+    const new_product = {
       "price": price, 
-      "product": product, 
-      "stock": stock
+      "product_name": product, 
+      "stock": stock,
+      "availability": true,
     }
-    console.log(product)
+    // console.log("product:", new_product)
 
     try {
-      const response = await axios.post("http://127.0.0.1:5000/products", product, {
+      const response = await axios.post("http://127.0.0.1:5000/products", new_product, {
         headers: {
           'Content-Type': 'application/json'
         }

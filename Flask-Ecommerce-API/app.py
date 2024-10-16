@@ -190,7 +190,10 @@ def add_product():
     except ValidationError as e:
         return jsonify(e.messages), 400
 
-    new_product = Products(product_name=product_data['product_name'], price=product_data['price'], availability=product_data['availability'], stock=product_data['stock'])
+    if product_data['availability'] is None:
+        new_product = Products(product_name=product_data['product_name'], price=product_data['price'],  availability=True, stock=product_data['stock']) 
+    else: 
+        new_product = Products(product_name=product_data['product_name'], price=product_data['price'], availability=product_data['availability'], stock=product_data['stock'])
     db.session.add(new_product)
     db.session.commit()
     return jsonify({"Message": "New product added successfully!"}), 201

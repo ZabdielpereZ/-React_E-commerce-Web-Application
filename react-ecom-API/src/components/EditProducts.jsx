@@ -36,14 +36,14 @@ const EditProducts = () => {
     setIsLoading(true);
     setError(null);
 
-    const product = {
+    const updated_product = {
       price: price,
-      product: product,
+      product_name: product,
       stock: stock,
     };
     console.log(product);
     try {
-        const response = await axios.put(`http://127.0.0.1:5000/products/${id}`, product, {
+        const response = await axios.put(`http://127.0.0.1:5000/products/${id}`, updated_product, {
           headers: {
             'Content-Type': 'application/json'
           }
@@ -54,7 +54,7 @@ const EditProducts = () => {
   
         // Trigger popup with success message (modal)
         setShowSuccessModal(true)
-        setModalName(product)
+        setModalName(updated_product.product_name)
   
         // Reset the form 
         setPrice('')
